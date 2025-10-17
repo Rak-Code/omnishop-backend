@@ -1,4 +1,4 @@
-name: Auto Merge Dev to Main
+name: Auto Create PR from Dev to Main
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - dev
 
 jobs:
-  merge-dev-to-main:
+  create-pr:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,20 +15,12 @@ jobs:
         with:
           fetch-depth: 0  # fetch all branches
 
-      - name: Merge dev into main
-        run: |
-          # Checkout main and fetch latest changes
-          git fetch origin main
-          git checkout main
-
-          # Configure Git for this repository
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Merge dev into main
-          git merge --no-ff origin/dev -m "Auto-merge dev into main"
-
-          # Push changes back to main
-          git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Pull Request from dev to main
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          base: main
+          head: dev
+          title: "Auto PR: Merge dev into main"
+          body: "This pull request was automatically created to merge changes from dev into main."
+          draft: false
