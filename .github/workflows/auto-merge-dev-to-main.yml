@@ -17,7 +17,11 @@ jobs:
         with:
           fetch-depth: 0  # needed to fetch all branches
 
-
+      # Set up Git credentials for GitHub Actions
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
       # Merge dev into main
       - name: Merge dev into main
