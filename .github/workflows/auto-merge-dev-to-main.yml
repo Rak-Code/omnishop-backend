@@ -1,6 +1,5 @@
 name: Auto Merge Dev to Main
 
-# Trigger workflow on push to dev branch
 on:
   push:
     branches:
@@ -11,24 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repo
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # needed to fetch all branches
+          fetch-depth: 0  # fetch all branches
 
-      # Set up Git credentials for GitHub Actions
-      - name: Configure Git
+      - name: Merge dev into main
         run: |
+          # Checkout main and fetch latest changes
+          git fetch origin main
+          git checkout main
+
+          # Configure Git for this repository
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      # Merge dev into main
-      - name: Merge dev into main
-        run: |
-          git checkout main
-          git pull origin main
-          git merge --no-ff dev -m "Auto-merge dev into main"
+          # Merge dev into main
+          git merge --no-ff origin/dev -m "Auto-merge dev into main"
+
+          # Push changes back to main
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
