@@ -1,0 +1,30 @@
+name: Auto Merge Dev to Main
+
+# Trigger workflow on push to dev branch
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  merge-dev-to-main:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # needed to fetch all branches
+
+
+
+      # Merge dev into main
+      - name: Merge dev into main
+        run: |
+          git checkout main
+          git pull origin main
+          git merge --no-ff dev -m "Auto-merge dev into main"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
