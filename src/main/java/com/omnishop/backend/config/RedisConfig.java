@@ -17,6 +17,8 @@ public class RedisConfig {
         return new LettuceConnectionFactory();
     }
 
+
+
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()

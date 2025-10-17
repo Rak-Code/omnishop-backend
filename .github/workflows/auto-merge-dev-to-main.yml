@@ -1,0 +1,26 @@
+name: Auto Create PR from Dev to Main
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # fetch all branches
+
+      - name: Create Pull Request from dev to main
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          base: main
+          head: dev
+          title: "Auto PR: Merge dev into main"
+          body: "This pull request was automatically created to merge changes from dev into main."
+          draft: false
